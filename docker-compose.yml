@@ -2,9 +2,6 @@ version: '2'
 
 services:
     nginx:
-        build: 
-            context: .
-            dockerfile: nginx-1.11.3-alpine.dockerfile
         image: nginx:1.11.3-alpine
         volumes:
             - ./html:/var/www/html:ro
@@ -22,7 +19,7 @@ services:
             dockerfile: wordpress-4.6-alpine.dockerfile
         image: wordpress:4.6-alpine
         volumes:
-            - ./html/wordpress01:/var/www/html
+            - ./html:/var/www/html
         links:
             - db
         env_file:

@@ -2,26 +2,38 @@
 
 ## Images
 based on official:
-- nginx:mainline-alpine
+- nginx:1.11.3-alpine
 - wordpress:4.6-fpm
-- mariadb:10.1
+- mariadb:10.1.16
 
-like docker-lemp, nginx got his dockerfile to be up to date  
-wordpress got as well his own makefile, running on alpine linux  
+before build, check if new version are available
+
+if the official repo is not the last version, build your own image with a dockerfile  
+simply copy the original dockerfile and change the version :D
+
+then, in docker-compose.yml, in nginx services (or wordpress, or mariadb), add:
+```
+build: 
+	context: .
+	dockerfile: nginx-last-version.dockerfile
+```
+wordpress got his own makefile, running on alpine linux  
 
 ## Config
-remove sample to all .env file and config them to your need  
-
-notice the difference in domainewhateveryouwant.conf compared to docker-lemp:  
-
+### environment variables
 ```
-location / {
-	root	/var/www/html/wordpress01;
-}
-location ~ \.php$ {
-	root	/var/www/html;
-}
+cp mariadb.config.env.sample mariadb.config.env
+cp php.config.env.sample php.config.env
 ```
+then, change default value ...
 
-i can by exemple, make several wordpress instance with the same nginx container
+### mariadb
+read the official docker image doc  
+(e.g. You can create db or user on init)
 
+### nginx
+you can have several site
+- add dir in ./html (e.g. ./html/site2/)
+- configure ./nginx/conf.d/site-available/site2.conf
+- make symbolic link in site-enable
+- use the same database or use another one
